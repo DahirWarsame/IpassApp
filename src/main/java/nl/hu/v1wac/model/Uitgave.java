@@ -1,6 +1,8 @@
 package nl.hu.v1wac.model;
 
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
@@ -95,8 +97,11 @@ public class Uitgave {
         this.afbeelding = afbeelding;
     }
 
-    public Date getUitgaveDatum() {
-        return uitgaveDatum;
+    public String getUitgaveDatum() {
+        Date date = uitgaveDatum;
+        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
+        String strDate = dateFormat.format(date);
+        return strDate;
     }
 
     public void setUitgaveDatum(Date uitgaveDatum) {

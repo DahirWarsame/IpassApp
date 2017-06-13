@@ -24,7 +24,7 @@ public class UitgaveDAO extends BaseDAO {
             stmt.setInt(5, uitgave.getAantalMaanden());
             stmt.setString(6, uitgave.getLink());
             stmt.setString(7, uitgave.getAfbeelding());
-            stmt.setDate(8, uitgave.getUitgaveDatum());
+            stmt.setString(8, uitgave.getUitgaveDatum());
             stmt.setString(9, uitgave.getBeschrijving());
 
             int affectedRows = stmt.executeUpdate();
@@ -39,8 +39,7 @@ public class UitgaveDAO extends BaseDAO {
     }
 
     public List<Uitgave> findByUserID(int userID) {
-        List<Uitgave> uitgaves = selectUtgaves("SELECT * FROM uitgaves WHERE user_id= "+userID);
-        return uitgaves;
+        return selectUtgaves("SELECT * FROM uitgaves WHERE user_id= "+userID);
     }
 
     public List<Uitgave> find10LargestPopulations() {
@@ -65,7 +64,7 @@ public class UitgaveDAO extends BaseDAO {
             stmt.setInt(5, uitgave.getAantalMaanden());
             stmt.setString(6, uitgave.getLink());
             stmt.setString(7, uitgave.getAfbeelding());
-            stmt.setDate(8, uitgave.getUitgaveDatum());
+            stmt.setString(8, uitgave.getUitgaveDatum());
             stmt.setString(9, uitgave.getBeschrijving());
 
             stmt.setInt(10, uitgave.getUitgaveID());

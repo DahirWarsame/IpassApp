@@ -26,11 +26,11 @@ public class DashboardResource {
     private WorldService service = ServiceProvider.getWorldService();
 
     @GET
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response loaduitgaves() {
-        // Authenticate the user against the database
-
+    @Produces(MediaType.APPLICATION_JSON)
+    public String loadUitgaves() {
+        System.out.println("DashboardResource/loadUitgaves");
         JsonArrayBuilder jab = Json.createArrayBuilder();
+
         for (Uitgave u : service.getUitgaveByUserID(1)) {
             JsonObjectBuilder job = buildCountryObject(u);
             jab.add(job);
@@ -49,7 +49,7 @@ public class DashboardResource {
                 .add("aantalMaanden", u.getAantalMaanden())
                 .add("link", u.getLink())
                 .add("afbeelding", u.getAfbeelding())
-                .add("uitgaveDatum", u.getUitgaveDatum().toString())
+                .add("uitgaveDatum", u.getUitgaveDatum())
                 .add("beschrijving", u.getBeschrijving());
         return job;
     }
