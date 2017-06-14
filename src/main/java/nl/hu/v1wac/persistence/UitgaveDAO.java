@@ -111,15 +111,15 @@ public class UitgaveDAO extends BaseDAO {
             ResultSet dbResultSet = stmt.executeQuery(query);
 
             while (dbResultSet.next()) {
-                int uitgaveID = dbResultSet.getInt("uitgaveID");
-                int userID = dbResultSet.getInt("userID");
+                int uitgaveID = dbResultSet.getInt("uitgave_id");
+                int userID = dbResultSet.getInt("user_id");
                 double bedrag = dbResultSet.getDouble("bedrag");
-                String soortUitgave = dbResultSet.getString("soortUitgave");
+                String soortUitgave = dbResultSet.getString("soort_uitgave");
                 int kenmerknummer = dbResultSet.getInt("kenmerknummer");
-                int aantalMaanden = dbResultSet.getInt("aantalMaanden");
+                int aantalMaanden = dbResultSet.getInt("aantal_maanden");
                 String link = dbResultSet.getString("link");
                 String afbeelding = dbResultSet.getString("afbeelding");
-                Date uitgaveDatum = dbResultSet.getDate("uitgaveDatum");
+                Date uitgaveDatum = dbResultSet.getDate("uitgave_datum");
                 String beschrijving = dbResultSet.getString("beschrijving");
 
                 uitgaves.add(new Uitgave(uitgaveID, userID, bedrag, soortUitgave, kenmerknummer, aantalMaanden, link

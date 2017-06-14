@@ -74,7 +74,7 @@ public class Uitgave {
     }
 
     public int getAantalMaanden() {
-        return aantalMaanden;
+        return (aantalMaanden);
     }
 
     public void setAantalMaanden(int aantalMaanden) {
@@ -82,7 +82,11 @@ public class Uitgave {
     }
 
     public String getLink() {
-        return link;
+        if(link.equals("null")) {
+            return link = "nvt";
+        } else {
+            return link;
+        }
     }
 
     public void setLink(String link) {
@@ -90,7 +94,11 @@ public class Uitgave {
     }
 
     public String getAfbeelding() {
-        return afbeelding;
+        if(afbeelding.equals("null")) {
+            return afbeelding = "nvt";
+        } else {
+            return afbeelding;
+        }
     }
 
     public void setAfbeelding(String afbeelding) {
@@ -99,9 +107,8 @@ public class Uitgave {
 
     public String getUitgaveDatum() {
         Date date = uitgaveDatum;
-        DateFormat dateFormat = new SimpleDateFormat("dd-mm-yyyy");
-        String strDate = dateFormat.format(date);
-        return strDate;
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        return dateFormat.format(date);
     }
 
     public void setUitgaveDatum(Date uitgaveDatum) {

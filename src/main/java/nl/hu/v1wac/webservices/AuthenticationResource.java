@@ -25,22 +25,20 @@ public class AuthenticationResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response authenticateUser(@FormParam("username") String username,
+    public Response authenticateUser(@FormParam("email") String email,
                                      @FormParam("password") String password) {
-        System.out.println("Authentication");
 
-            // Authenticate the user against the database
             UserDAO dao = new UserDAO();
-            String user = dao.findUserForUsernameAndPassword(username, password);
-            System.out.println("in the try van de auth");
+            String user = dao.findUserForUsernameAndPassword(email, password);
+
             if (user == null) { throw new IllegalArgumentException("No user found!"); }
-            System.out.println(user);
+
             // Issue a token for the user
             Calendar expiration = Calendar.getInstance();
             expiration.add(Calendar.MINUTE, 30);
 
             String token = Jwts.builder()
-                    .setSubject(username)
+                    .setSubject(email)
                     .setExpiration(expiration.getTime())
                     .signWith(SignatureAlgorithm.HS512, key)
                     .compact();

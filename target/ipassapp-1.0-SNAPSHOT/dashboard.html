@@ -1,32 +1,118 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Dashboard</title>
-    <link rel="stylesheet" type="text/css" href="semantic/out/semantic.min.css">
-    <script
-            src="https://code.jquery.com/jquery-3.1.1.min.js"
-            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-            crossorigin="anonymous"></script>
-    <script src="semantic/out/semantic.min.js"></script>
+    <!-- Standard Meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <!-- Site Properties -->
+    <title>Fixed Menu Example - Semantic</title>
+
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/site.css">
+
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/container.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/grid.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/header.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/image.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/menu.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/table.css">
+
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/list.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/segment.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+
+    <style type="text/css">
+        body {
+            background-color: #FFFFFF;
+        }
+
+        .ui.menu .item img.logo {
+            margin-right: 1.5em;
+        }
+
+        .main.container {
+            margin-top: 7em;
+        }
+
+        .wireframe {
+            margin-top: 2em;
+        }
+
+        .ui.footer.segment {
+            margin: 5em 0em 0em;
+            padding: 5em 0em;
+        }
+    </style>
+    <style type="text/css">
+        :root .ch[onclick="ga(this,event)"],
+        :root .mw > #rcnt > #center_col > #taw > .c,
+        :root .mw > #rcnt > #center_col > #taw > #tvcap > .c,
+        :root .ad.super,
+        :root #content > #right > .dose > .dosesingle,
+        :root #content > #center > .dose > .dosesingle,
+        :root #carbonads-container,
+        :root .carbonad {
+            display: none !important;
+        }</style>
+    <script>
+        $(document).ready(function () {
+            if (localStorage.getItem("sessionToken") === "undefined") {
+                window.location.href = "/index.html";
+            }
+
+        })
+    </script>
 </head>
 <body>
-<ul>
-<li><a href="calculator/calculator.html">Calculator</a></li>
-<li><a href="errorpage.html">Errorpage</a></li>
-<li><a href="locationweather/locationweather.html">Location / Weather</a></li>
-<li><a href="simplecalculaotr.html">Simpele Calculator</a></li>
-<li><a href="textfield.html">Textfield</a></li>
-<li><a href="storage/localstorage.html">Localstorage</a></li>
-    <li><a href="storage/label.html">Label - Storage</a></li>
-    <li><a href="/restservices/countries">Countries</a></li>
-    <li><a href="DBMS/DBMS.html">DBMS</a></li>
-    <li><a href="login.html">Login</a></li>
-    <li><a href="register.html">Register</a></li>
-
-</ul>
-
+<div class="ui middle aligned four column centered grid">
+    <div class="stretched row">
+        <div class="column">
+                <table id="uitgaveTable" class="ui celled table">
+                    <thead>
+                    <tr>
+                        <th>beschrijving</th>
+                        <th>bedrag</th>
+                        <th>soort uitgave</th>
+                        <th>link</th>
+                        <th>afbeelding</th>
+                        <th>uitgave datum</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
+        </div>
+        <div class="column">
+            <div class="ui segment">
+                1
+            </div>
+            <div class="ui segment">
+                2
+            </div>
+        </div>
+        <div class="column">
+            <div class="ui segment">
+                1
+            </div>
+            <div class="ui segment">
+                2
+            </div>
+            <div class="ui segment">
+                3
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

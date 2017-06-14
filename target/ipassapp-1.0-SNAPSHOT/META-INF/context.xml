@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource name="jdbc/mysql"
+              url="jdbc:mysql://localhost:3306/no_spang"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              auth="Container"
+              type="javax.sql.DataSource"
+              username="dahir"
+              password="admin"/>
+</Context>

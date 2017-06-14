@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO extends BaseDAO {
+
     public String findUserForUsernameAndPassword(String username, String password) {
         String user = null;
-        String query = "SELECT username FROM users WHERE email = ? AND password = ?";
-
+        String query = "SELECT email FROM users WHERE email = ? AND password = ?";
         try (Connection con = super.getConnection()) {
 
             PreparedStatement pstmt = con.prepareStatement(query);
@@ -19,11 +19,11 @@ public class UserDAO extends BaseDAO {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next())
                 user = rs.getString("email");
-
+            con.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-        System.out.println(user);
+
         return user;
     }
 
