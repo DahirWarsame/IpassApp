@@ -25,12 +25,6 @@ function loadCountries() {
                 object.soort_uitgave +
                 "</td>" +
                 "<td>" +
-                object.link +
-                "</td>" +
-                "<td>" +
-                object.afbeelding +
-                "</td>" +
-                "<td>" +
                 object.uitgave_datum +
                 "</td>" +
                 "<td class='delete'><i class='ban icon'></i><i class='write icon'></i></td>" +

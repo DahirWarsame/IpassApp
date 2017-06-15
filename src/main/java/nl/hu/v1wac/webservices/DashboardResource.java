@@ -1,9 +1,5 @@
 package nl.hu.v1wac.webservices;
 
-/**
- * Created by dahir on 6/12/2017.
- */
-
 import nl.hu.v1wac.model.ServiceProvider;
 import nl.hu.v1wac.model.Uitgave;
 import nl.hu.v1wac.model.WorldService;

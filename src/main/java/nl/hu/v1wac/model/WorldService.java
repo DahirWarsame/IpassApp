@@ -1,25 +1,27 @@
 package nl.hu.v1wac.model;
 
 import nl.hu.v1wac.persistence.UitgaveDAO;
+import nl.hu.v1wac.persistence.InkomstDAO;
 
 import java.util.List;
 
 public class WorldService {
 	private UitgaveDAO UitgaveDAO = new UitgaveDAO();
+	private InkomstDAO InkomstDAO = new InkomstDAO();
 
-	public List<Uitgave> getAllCountries() {
-		return UitgaveDAO.findAll();
-	}
+	public List<Uitgave> getUitgaveByUserID(int id) { return UitgaveDAO.findByUserID(id);}
 
-	public List<Uitgave> get10LargestPopulations() { return UitgaveDAO.find10LargestPopulations(); }
+	public boolean delete(Uitgave uitgave) { return UitgaveDAO.delete(uitgave); }
 
-	public List<Uitgave> get10LargestSurfaces() { return UitgaveDAO.find10LargestSurfaces(); }
+	public void addUitgave(Uitgave uitgave) { UitgaveDAO.save(uitgave);}
 
-	public List<Uitgave> getUitgaveByUserID(int code) { return UitgaveDAO.findByUserID(code);}
+	public void updateUitgave(Uitgave uitgave) { UitgaveDAO.update(uitgave);}
 
-	public boolean delete(Uitgave country) { return UitgaveDAO.delete(country); }
+	public List<Inkomst> getInkomstByUserID(int id) { return InkomstDAO.findByUserID(id);}
 
-	public void addCountry(Uitgave country) { UitgaveDAO.save(country);}
+	public boolean delete(Inkomst inkomst) { return InkomstDAO.delete(inkomst); }
 
-	public void updateCountry(Uitgave country) { UitgaveDAO.update(country);}
+	public void addInkomst(Inkomst inkomst) { InkomstDAO.save(inkomst);}
+
+	public void updateInkomst(Inkomst inkomst) { InkomstDAO.update(inkomst);}
 }

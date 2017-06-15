@@ -1,19 +1,18 @@
 package nl.hu.v1wac.model;
 
-import java.util.Calendar;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
-/**
- * Created by dahir on 6/12/2017.
- */
 public class Inkomst {
     private int inkomstID;
     private int userID;
     private double bedrag;
-    private boolean soortInkomen;
-    private Calendar inkomstDatum;
+    private String soortInkomen;
+    private Date inkomstDatum;
     private String beschrijving;
 
-    public Inkomst(int inkomstID, int userID, double bedrag, boolean soortInkomen, Calendar inkomstDatum, String beschrijving) {
+    public Inkomst(int inkomstID, int userID, double bedrag, String soortInkomen, Date inkomstDatum, String beschrijving) {
         this.inkomstID = inkomstID;
         this.userID = userID;
         this.bedrag = bedrag;
@@ -25,50 +24,24 @@ public class Inkomst {
     public int getInkomstID() {
         return inkomstID;
     }
-
-    public void setInkomstID(int inkomstID) {
-        this.inkomstID = inkomstID;
-    }
-
     public int getUserID() {
         return userID;
     }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
-
     public double getBedrag() {
         return bedrag;
     }
-
-    public void setBedrag(double bedrag) {
-        this.bedrag = bedrag;
-    }
-
-    public boolean isSoortInkomen() {
+    public String getSoortInkomen() {
         return soortInkomen;
     }
-
-    public void setSoortInkomen(boolean soortInkomen) {
-        this.soortInkomen = soortInkomen;
+    public String getInkomstDatum() {
+        Date date = inkomstDatum;
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        return dateFormat.format(date);
     }
-
-    public Calendar getInkomstDatum() {
-        return inkomstDatum;
-    }
-
-    public void setInkomstDatum(Calendar inkomstDatum) {
-        this.inkomstDatum = inkomstDatum;
-    }
-
     public String getBeschrijving() {
         return beschrijving;
     }
 
-    public void setBeschrijving(String beschrijving) {
-        this.beschrijving = beschrijving;
-    }
 
     @Override
     public String toString() {

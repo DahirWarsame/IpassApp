@@ -12,10 +12,10 @@ public class UitgaveDAO extends BaseDAO {
         System.out.print(uitgave);
         try (Connection conn = super.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(
-                    "INSERT INTO uitgave " +
-                            "(code, name, continent, region, surfacearea, population, localname, governmentform, code2, latitude, longitude, capital) " +
+                    "INSERT INTO uitgaves " +
+                            "(`user_id`, `bedrag`, `soort_uitgave`, `kenmerknummer`, `aantal_maanden`, `link`, `afbeelding`, `uitgave_datum`, `beschrijving`) " +
                             "VALUES " +
-                            "(?,?,CAST(? AS continenttype),?,?,?,?,?,?,?,?,?)");
+                            "(?,?,?,?,?,?,?,?,?)");
 
             stmt.setInt(1, uitgave.getUserID());
             stmt.setDouble(2, uitgave.getBedrag());
@@ -26,35 +26,20 @@ public class UitgaveDAO extends BaseDAO {
             stmt.setString(7, uitgave.getAfbeelding());
             stmt.setString(8, uitgave.getUitgaveDatum());
             stmt.setString(9, uitgave.getBeschrijving());
-
-            int affectedRows = stmt.executeUpdate();
-//            if (affectedRows == 1) return country;
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
     }
 
-    public List<Uitgave> findAll() {
-        return selectUtgaves("SELECT * FROM country");
-    }
-
     public List<Uitgave> findByUserID(int userID) {
-        return selectUtgaves("SELECT * FROM uitgaves WHERE user_id= "+userID);
-    }
-
-    public List<Uitgave> find10LargestPopulations() {
-        return selectUtgaves("SELECT * FROM country ORDER BY population DESC LIMIT 10");
-    }
-
-    public List<Uitgave> find10LargestSurfaces() {
-        return selectUtgaves("SELECT * FROM country ORDER BY surfacearea DESC LIMIT 10");
+        return selectUtgaves("SELECT * FROM uitgaves WHERE user_id= " + userID);
     }
 
     public Uitgave update(Uitgave uitgave) {
         try (Connection conn = super.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("UPDATE uitgave SET user_id = ?, bedrag = ?," +
+            PreparedStatement stmt = conn.prepareStatement("UPDATE uitgaves SET user_id = ?, bedrag = ?," +
                     " soort_uitgave = ?, kenmerknummer = ?, aantal_maanden = ?, link = ?, " +
-                    "afbeelding = ?, uitgave_datum = ?, beschrijving = ? WHERE code = ?");
+                    "afbeelding = ?, uitgave_datum = ?, beschrijving = ? WHERE uitgave_id = ?");
 
 
             stmt.setInt(1, uitgave.getUserID());
@@ -81,17 +66,7 @@ public class UitgaveDAO extends BaseDAO {
         boolean succes = false;
 
         try (Connection conn = super.getConnection()) {
-            String delete_fk = "DELETE FROM city WHERE countrycode = ?";
-            PreparedStatement fk_stmt = conn.prepareStatement(delete_fk);
-            fk_stmt.setInt(1, uitgave.getUitgaveID());
-            fk_stmt.executeUpdate();
-
-            String delete_fk_2 = "DELETE FROM countrylanguage WHERE countrycode = ?";
-            PreparedStatement fk_stmt_2 = conn.prepareStatement(delete_fk_2);
-            fk_stmt_2.setInt(1, uitgave.getUitgaveID());
-            fk_stmt_2.executeUpdate();
-
-            PreparedStatement stmt = conn.prepareStatement("DELETE FROM country WHERE code = ?");
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM uitgaves WHERE uitgave_id = ?");
             stmt.setInt(1, uitgave.getUitgaveID());
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 1) {
@@ -104,7 +79,7 @@ public class UitgaveDAO extends BaseDAO {
     }
 
     private List<Uitgave> selectUtgaves(String query) {
-        List<Uitgave> uitgaves = new ArrayList<Uitgave>();
+        List<Uitgave> uitgaves = new ArrayList<>();
 
         try (Connection conn = super.getConnection()) {
             Statement stmt = conn.createStatement();
@@ -123,7 +98,7 @@ public class UitgaveDAO extends BaseDAO {
                 String beschrijving = dbResultSet.getString("beschrijving");
 
                 uitgaves.add(new Uitgave(uitgaveID, userID, bedrag, soortUitgave, kenmerknummer, aantalMaanden, link
-                , afbeelding, uitgaveDatum, beschrijving));
+                        , afbeelding, uitgaveDatum, beschrijving));
             }
 
         } catch (SQLException sqle) {
