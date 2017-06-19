@@ -18,17 +18,132 @@
     <link rel="stylesheet" type="text/css" href="semantic/out/components/image.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/menu.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/table.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/modal.css">
+
 
     <link rel="stylesheet" type="text/css" href="semantic/out/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/button.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/form.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/input.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/list.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/segment.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/dropdown.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/dimmer.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/transition.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/dropdown.css">
     <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="semantic/out/components/dropdown.js"></script>
+    <script src="semantic/out/components/modal.js"></script>
+    <script src="semantic/out/components/transition.js"></script>
+    <script src="semantic/out/components/dimmer.js"></script>
     <script src="assets/js/dashboard.js"></script>
+    <style type="text/css">
 
+        .hidden.menu {
+            display: none;
+        }
+
+        .masthead.segment {
+            min-height: 700px;
+            padding: 1em 0em;
+        }
+
+        .masthead .logo.item img {
+            margin-right: 1em;
+        }
+
+        .masthead .ui.menu .ui.button {
+            margin-left: 0.5em;
+        }
+
+        .masthead h1.ui.header {
+            margin-top: 3em;
+            margin-bottom: 0em;
+            font-size: 4em;
+            font-weight: normal;
+        }
+
+        .masthead h2 {
+            font-size: 1.7em;
+            font-weight: normal;
+        }
+
+        .ui.vertical.stripe {
+            padding: 8em 0em;
+        }
+
+        .ui.vertical.stripe h3 {
+            font-size: 2em;
+        }
+
+        .ui.vertical.stripe .button + h3,
+        .ui.vertical.stripe p + h3 {
+            margin-top: 3em;
+        }
+
+        .ui.vertical.stripe .floated.image {
+            clear: both;
+        }
+
+        .ui.vertical.stripe p {
+            font-size: 1.33em;
+        }
+
+        .ui.vertical.stripe .horizontal.divider {
+            margin: 3em 0em;
+        }
+
+        .quote.stripe.segment {
+            padding: 0em;
+        }
+
+        .quote.stripe.segment .grid .column {
+            padding-top: 5em;
+            padding-bottom: 5em;
+        }
+
+        .footer.segment {
+            padding: 5em 0em;
+        }
+
+        .secondary.pointing.menu .toc.item {
+            display: none;
+        }
+
+        @media only screen and (max-width: 700px) {
+            .ui.fixed.menu {
+                display: none !important;
+            }
+
+            .secondary.pointing.menu .item,
+            .secondary.pointing.menu .menu {
+                display: none;
+            }
+
+            .secondary.pointing.menu .toc.item {
+                display: block;
+            }
+
+            .masthead.segment {
+                min-height: 350px;
+            }
+
+            .masthead h1.ui.header {
+                font-size: 2em;
+                margin-top: 1.5em;
+            }
+
+            .masthead h2 {
+                margin-top: 0.5em;
+                font-size: 1.5em;
+            }
+        }
+
+
+    </style>
     <style type="text/css">
         body {
             background-color: #FFFFFF;
@@ -38,12 +153,16 @@
             margin-right: 1.5em;
         }
 
-        .main.container {
-            margin-top: 7em;
+        h2 {
+            color: black;
         }
 
-        .wireframe {
-            margin-top: 2em;
+        #header {
+            background-image: url(assets/img/nospang.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: 0% 37%;
         }
 
         .ui.footer.segment {
@@ -64,50 +183,77 @@
         }</style>
     <script>
         $(document).ready(function () {
-            if (localStorage.getItem("sessionToken") === "undefined") {
+            if (sessionStorage.getItem("sessionToken")) {
+
+            } else {
                 window.location.href = "/index.html";
             }
-
-        })
+        });
     </script>
 </head>
 <body>
-<div class="ui middle aligned four column centered grid">
-    <div class="stretched row">
-        <div class="column">
-            <table id="uitgaveTable" class="ui celled table">
-                <thead>
-                <tr>
-                    <th>beschrijving</th>
-                    <th>bedrag</th>
-                    <th>soort uitgave</th>
-                    <th>uitgave datum</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="column">
-            <div class="ui segment">
-                <img class="ui image" src="assets/img/nospang.png">
+<div class="ui attached stackable menu">
+    <div class="ui container">
+        <a href="dashboard.html" class="item">
+            <i class="home icon"></i> Home
+        </a>
+        <a class="item">
+            <i class="grid layout icon"></i> Browse
+        </a>
+        <a class="item">
+            <i class="mail icon"></i> Messages
+        </a>
+    </div>
+</div>
+<div id="header" class="ui inverted vertical masthead center aligned segment">
+    <div class="ui text container">
+        <h1 class="ui header">
+            Welkom bij jouw Dashboard
+        </h1>
+        <h2>Dit is joue hub voor al je informatie over jouw persoonlijke geldzaken.</h2>
+    </div>
+</div>
+<div class="ui vertical stripe segment">
+    <div class="ui equal width stackable internally celled grid">
+        <div class="center aligned row">
+            <div class="column">
+                <button id="adduitgave" class="positive ui button"><a href="uitgaves.html" style="color: white;"> <i
+                        class="add circle icon"></i> Add Uitgave </a></button>
+                <table id="uitgaveTable" class="ui celled table">
+                    <thead>
+                    <tr>
+                        <th>beschrijving</th>
+                        <th>bedrag</th>
+                        <th>soort uitgave</th>
+                        <th>uitgave datum</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="ui segment">
-                2
-            </div>
-        </div>
-        <div class="column">
-            <div class="ui segment">
-                1
-            </div>
-            <div class="ui segment">
-                2
-            </div>
-            <div class="ui segment">
-                3
+            <div class="column">
+                <button id="addinkomst" class="positive ui button"><a href="inkomsten.html" style="color: white;"> <i
+                        class="add circle icon"></i> Add Inkomst</a></button>
+
+                <table id="inkomstTable" class="ui celled table">
+                    <thead>
+                    <tr>
+                        <th>beschrijving</th>
+                        <th>bedrag</th>
+                        <th>soort inkomst</th>
+                        <th>inkomst datum</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -29,6 +29,10 @@ public class Uitgave {
         this.beschrijving = beschrijving;
     }
 
+    public Uitgave(int userID) {
+        this.userID = userID;
+    }
+
     public int getUitgaveID() {
         return uitgaveID;
     }
@@ -54,15 +58,7 @@ public class Uitgave {
     }
 
     public String getLink() {
-        if(link.equals("null")) {
-            return link = "nvt";
-        } else {
-            return link;
-        }
-    }
-
-    public void setLink(String link) {
-        this.link = link;
+        return link;
     }
 
     public String getAfbeelding() {
@@ -81,6 +77,46 @@ public class Uitgave {
 
     public String getBeschrijving() {
         return beschrijving;
+    }
+
+    public void setUitgaveID(int uitgaveID) {
+        this.uitgaveID = uitgaveID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public void setBedrag(double bedrag) {
+        this.bedrag = bedrag;
+    }
+
+    public void setSoortUitgave(String soortUitgave) {
+        this.soortUitgave = soortUitgave;
+    }
+
+    public void setKenmerknummer(int kenmerknummer) {
+        this.kenmerknummer = kenmerknummer;
+    }
+
+    public void setAantalMaanden(int aantalMaanden) {
+        this.aantalMaanden = aantalMaanden;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public void setAfbeelding(String afbeelding) {
+        this.afbeelding = afbeelding;
+    }
+
+    public void setUitgaveDatum(Date uitgaveDatum) {
+        this.uitgaveDatum = uitgaveDatum;
+    }
+
+    public void setBeschrijving(String beschrijving) {
+        this.beschrijving = beschrijving;
     }
 
     @Override

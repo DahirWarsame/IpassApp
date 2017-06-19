@@ -9,7 +9,8 @@ import java.util.List;
 public class InkomstDAO extends BaseDAO {
 
     public void save(Inkomst inkomst) {
-        System.out.print(inkomst);
+        System.out.println(inkomst);
+        System.out.println("in save func");
         try (Connection conn = super.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(
                     "INSERT INTO inkomsten " +
@@ -18,20 +19,44 @@ public class InkomstDAO extends BaseDAO {
                             "(?,?,?,?,?)");
 
             stmt.setInt(1, inkomst.getUserID());
-            stmt.setDouble(2, inkomst.getBedrag());
+            stmt.setFloat(2, inkomst.getBedrag());
             stmt.setString(3, inkomst.getSoortInkomen());
-            stmt.setString(4, inkomst.getInkomstDatum());
+            stmt.setDate(4, inkomst.getInkomstDatum());
             stmt.setString(5, inkomst.getBeschrijving());
 
+            int affectedRows = stmt.executeUpdate();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
     }
 
     public List<Inkomst> findByUserID(int userID) {
-        return selectUtgaves("SELECT * FROM inkomsten WHERE user_id= " + userID);
+        return selectInkomsten("SELECT * FROM inkomsten WHERE user_id= " + userID);
+    }
+    public Inkomst findByID(int id) {
+        List<Inkomst> inkomsten = selectInkomsten("SELECT * FROM inkomsten WHERE inkomst_id = " + id);
+        if (inkomsten.size() > 0) return inkomsten.get(0);
+        return null;
     }
 
+    public int totaalInkomst(int id) {
+        int totaalInkomst = 0;
+        try (Connection conn = super.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet dbResultSet = stmt.executeQuery("SELECT SUM(bedrag) as totaal FROM inkomsten WHERE user_id = "+ id + " GROUP BY user_id");
+
+            while (dbResultSet.next()) {
+                totaalInkomst = dbResultSet.getInt("totaal");
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return totaalInkomst;
+
+
+    }
+//;
     public Inkomst update(Inkomst inkomst) {
         try (Connection conn = super.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("UPDATE inkomsten SET user_id = ?, bedrag = ?," +
@@ -41,7 +66,7 @@ public class InkomstDAO extends BaseDAO {
             stmt.setInt(1, inkomst.getUserID());
             stmt.setDouble(2, inkomst.getBedrag());
             stmt.setString(3, inkomst.getSoortInkomen());
-            stmt.setString(4, inkomst.getInkomstDatum());
+            stmt.setDate(4, inkomst.getInkomstDatum());
             stmt.setString(5, inkomst.getBeschrijving());
 
             stmt.setInt(6, inkomst.getInkomstID());
@@ -70,7 +95,7 @@ public class InkomstDAO extends BaseDAO {
         return succes;
     }
 
-    private List<Inkomst> selectUtgaves(String query) {
+    private List<Inkomst> selectInkomsten(String query) {
         List<Inkomst> inkomsten = new ArrayList<>();
 
         try (Connection conn = super.getConnection()) {
@@ -80,8 +105,8 @@ public class InkomstDAO extends BaseDAO {
             while (dbResultSet.next()) {
                 int inkomstID = dbResultSet.getInt("inkomst_id");
                 int userID = dbResultSet.getInt("user_id");
-                double bedrag = dbResultSet.getDouble("bedrag");
-                String soortUitgave = dbResultSet.getString("soort_inkomst");
+                float bedrag = dbResultSet.getFloat("bedrag");
+                String soortUitgave = dbResultSet.getString("soort_inkomen");
                 Date inkomstDatum = dbResultSet.getDate("inkomst_datum");
                 String beschrijving = dbResultSet.getString("beschrijving");
 

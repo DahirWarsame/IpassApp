@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!-- Standard Meta -->
+<head>    <!-- Standard Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
     <!-- Site Properties -->
-    <title>Dashboard</title>
+    <title>Uitgaves</title>
 
     <link rel="stylesheet" type="text/css" href="semantic/out/components/reset.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/site.css">
@@ -192,6 +191,7 @@
     </script>
 </head>
 <body>
+
 <div class="ui attached stackable menu">
     <div class="ui container">
         <a href="dashboard.html" class="item">
@@ -217,46 +217,108 @@
     <div class="ui equal width stackable internally celled grid">
         <div class="center aligned row">
             <div class="column">
-                <button id="adduitgave" class="positive ui button"><a href="uitgaves.html" style="color: white;"> <i
-                        class="add circle icon"></i> Add Uitgave </a></button>
-                <table id="uitgaveTable" class="ui celled table">
-                    <thead>
-                    <tr>
-                        <th>beschrijving</th>
-                        <th>bedrag</th>
-                        <th>soort uitgave</th>
-                        <th>uitgave datum</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                    </tr>
-                    </tbody>
-                </table>
+                <form id="addUitgaveForm" method="post" class="ui large form">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="euro icon"></i>
+                            <input type="number" name="bedrag" placeholder="Bedrag">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="dropdown outline icon"></i>
+                            <select class="ui dropdown" name="soort_uitgave">
+                                <option value="weekelijks">Weekelijks</option>
+                                <option value="maandelijks">Maandelijks</option>
+                                <option value="jaarlijks">Jaarlijks</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="calendar icon"></i>
+                            <input type="date" name="uitgave_datum" placeholder="DD-MM-YYYY">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="comment icon"></i>
+                            <input type="text" name="beschrijving" placeholder="beschrijving">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="hashtag icon"></i>
+                            <input type="number" name="kenmerknummer" placeholder="Kenmerknummer">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="hashtag icon"></i>
+                            <input type="number" name="aantal_maanden" placeholder="Aantal maanden">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="linkify icon"></i>
+                            <input type="url" name="link"
+                                   placeholder="Tijdelijke Uitgave url (bijv. webshop artikel)">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="image icon"></i>
+                            <input type="url" name="afbeelding" placeholder="afbeelding url">
+                        </div>
+                    </div>
+                    <input type="submit" value="Register" class="ui middle teal submit button">
+                </form>
             </div>
             <div class="column">
-                <button id="addinkomst" class="positive ui button"><a href="inkomsten.html" style="color: white;"> <i
-                        class="add circle icon"></i> Add Inkomst</a></button>
-
-                <table id="inkomstTable" class="ui celled table">
-                    <thead>
-                    <tr>
-                        <th>beschrijving</th>
-                        <th>bedrag</th>
-                        <th>soort inkomst</th>
-                        <th>inkomst datum</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                    </tr>
-                    </tbody>
-                </table>
+                <h2 class="ui header">
+                    <i class="euro icon"></i>
+                    <div class="content">
+                        <div class="sub header">Het totaal bedrag is:</div>
+                        <span id="totalUitgave"></span>
+                    </div>
+                </h2>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $("#addUitgaveForm").on("submit", function (e) {
+        e.preventDefault();
+        var userid = sessionStorage.getItem("sessionToken");
+//        $.post({
+//            url: "/restservices/dashboard/add/uitgave/" + userid,
+//            data: $(this).serialize(),
+//            success: function (data) {
+//                sessionStorage.setItem("sessionToken", data);
+//                window.location.href = "/dashboard.html";
+//            }
+//        });
+        var object = {};
+
+        var inputs = $("#addUitgaveForm input");
+        var dropdown = $("#addUitgaveForm select");
+
+
+        $.each(inputs, function (index, input) {
+            object["" + input.name + ""] = input.value;
+        });
+        object["" + dropdown[0].name + ""] = dropdown[0].value;
+        console.log(object);
+        $.ajax({
+            url: "/restservices/dashboard/add/uitgave/" + userid,
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(object),
+            success: function (result) {
+
+            }
+        });
+    });
+</script>
 </body>
 </html>

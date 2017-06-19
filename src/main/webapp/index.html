@@ -27,6 +27,14 @@
     <link rel="stylesheet" type="text/css" href="semantic/out/components/icon.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script>
+        $(document).ready(function () {
+            if (sessionStorage.getItem("sessionToken")) {
+                window.location.href = "/dashboard.html";
+            }
+
+        })
+    </script>
+    <script>
         $(document)
             .ready(function () {
                 $('.ui.form')
@@ -100,7 +108,7 @@
         </form>
 
         <div class="ui message">
-            New to us? <a href="#">Sign Up</a>
+            New to us? <a href="register.html">Sign Up</a>
         </div>
     </div>
 </div>

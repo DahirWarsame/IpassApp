@@ -10,6 +10,7 @@ public class UitgaveDAO extends BaseDAO {
 
     public void save(Uitgave uitgave) {
         System.out.print(uitgave);
+        System.out.print("in save func");
         try (Connection conn = super.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(
                     "INSERT INTO uitgaves " +
@@ -33,6 +34,11 @@ public class UitgaveDAO extends BaseDAO {
 
     public List<Uitgave> findByUserID(int userID) {
         return selectUtgaves("SELECT * FROM uitgaves WHERE user_id= " + userID);
+    }
+    public Uitgave findByID(int id) {
+        List<Uitgave> uitgaves = selectUtgaves("SELECT * FROM uitgaves WHERE uitgave_id = " + id);
+        if (uitgaves.size() > 0) return uitgaves.get(0);
+        return null;
     }
 
     public Uitgave update(Uitgave uitgave) {
@@ -100,11 +106,26 @@ public class UitgaveDAO extends BaseDAO {
                 uitgaves.add(new Uitgave(uitgaveID, userID, bedrag, soortUitgave, kenmerknummer, aantalMaanden, link
                         , afbeelding, uitgaveDatum, beschrijving));
             }
-
+            conn.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
         return uitgaves;
     }
 
+    public int totaalUitgave(int id) {
+        int totaalUitgave = 0;
+        try (Connection conn = super.getConnection()) {
+            Statement stmt = conn.createStatement();
+            ResultSet dbResultSet = stmt.executeQuery("SELECT SUM(bedrag) as totaal FROM uitgaves WHERE user_id = "+ id + " GROUP BY user_id");
+
+            while (dbResultSet.next()) {
+                totaalUitgave = dbResultSet.getInt("totaal");
+            }
+
+        } catch (SQLException sqle) {
+            sqle.printStackTrace();
+        }
+        return totaalUitgave;
+    }
 }

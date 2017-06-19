@@ -1,18 +1,19 @@
 package nl.hu.v1wac.model;
 
-import java.sql.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Inkomst {
     private int inkomstID;
     private int userID;
-    private double bedrag;
+    private float bedrag;
     private String soortInkomen;
-    private Date inkomstDatum;
+    private java.sql.Date inkomstDatum;
     private String beschrijving;
 
-    public Inkomst(int inkomstID, int userID, double bedrag, String soortInkomen, Date inkomstDatum, String beschrijving) {
+    public Inkomst(int inkomstID, int userID, float bedrag, String soortInkomen, java.sql.Date inkomstDatum, String beschrijving) {
         this.inkomstID = inkomstID;
         this.userID = userID;
         this.bedrag = bedrag;
@@ -21,27 +22,72 @@ public class Inkomst {
         this.beschrijving = beschrijving;
     }
 
+    public Inkomst(int userID) {
+        this.userID = userID;
+    }
+
     public int getInkomstID() {
         return inkomstID;
     }
+
     public int getUserID() {
         return userID;
     }
-    public double getBedrag() {
+
+    public float getBedrag() {
         return bedrag;
     }
+
     public String getSoortInkomen() {
         return soortInkomen;
     }
-    public String getInkomstDatum() {
+
+    public java.sql.Date getInkomstDatum() {
+        return inkomstDatum;
+    }
+
+    public String getInkomstDatumString() {
         Date date = inkomstDatum;
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         return dateFormat.format(date);
     }
+
     public String getBeschrijving() {
         return beschrijving;
     }
 
+    public void setInkomstID(int inkomstID) {
+        this.inkomstID = inkomstID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public void setBedrag(float bedrag) {
+        this.bedrag = bedrag;
+    }
+
+    public void setSoortInkomen(String soortInkomen) {
+        this.soortInkomen = soortInkomen;
+    }
+
+    public void setInkomstDatum(String inkomstDatum) {
+        try {
+
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsed = format.parse(inkomstDatum);
+            java.sql.Date sql = new java.sql.Date(parsed.getTime());
+            this.inkomstDatum = sql;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        };
+
+    }
+
+    public void setBeschrijving(String beschrijving) {
+        this.beschrijving = beschrijving;
+    }
 
     @Override
     public String toString() {

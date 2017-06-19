@@ -1,8 +1,5 @@
 package nl.hu.v1wac.webservices;
 
-/**
- * Created by dahir on 6/12/2017.
- */
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,51 +25,35 @@ public class AuthenticationResource {
     public Response authenticateUser(@FormParam("email") String email,
                                      @FormParam("password") String password) {
 
-            UserDAO dao = new UserDAO();
-            String user = dao.findUserForUsernameAndPassword(email, password);
+        UserDAO dao = new UserDAO();
+        String user = dao.authenticateUser(email, password);
 
-            if (user == null) { throw new IllegalArgumentException("No user found!"); }
+        if (user == null) {
+            throw new IllegalArgumentException("No user found!");
+        }
 
-            // Issue a token for the user
-            Calendar expiration = Calendar.getInstance();
-            expiration.add(Calendar.MINUTE, 30);
-
-            String token = Jwts.builder()
-                    .setSubject(email)
-                    .setExpiration(expiration.getTime())
-                    .signWith(SignatureAlgorithm.HS512, key)
-                    .compact();
-            // Return the token on the response
-            return Response.ok(token).build();
+        return Response.ok(user).build();
 
     }
 
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response registerUser(@FormParam("username") String username,
+    public Response registerUser(@FormParam("email") String email,
                                  @FormParam("password") String password,
                                  @FormParam("password_confirmation") String password_confirmation) {
         boolean success = false;
         try {
             UserDAO dao = new UserDAO();
-            if(password.equals(password_confirmation)) {
-                success = dao.registerUser(username, password);
+            if (password.equals(password_confirmation)) {
+                success = dao.registerUser(email, password);
             }
 
-
-            if(success) {
-                Calendar expiration = Calendar.getInstance();
-                expiration.add(Calendar.MINUTE, 30);
-
-                String token = Jwts.builder()
-                        .setSubject(username)
-                        .claim("role", "user")
-                        .setExpiration(expiration.getTime())
-                        .signWith(SignatureAlgorithm.HS512, key)
-                        .compact();
-                // Return the token on the response
-                return Response.ok(token).build();
+            if (success) {
+                String user = dao.authenticateUser(email, password);
+                // test met user
+                //TODO:: add actual token
+                return Response.ok(user).build();
             }
 
         } catch (JwtException | IllegalArgumentException e) {
@@ -82,5 +63,5 @@ public class AuthenticationResource {
 
         return Response.status(Response.Status.NOT_ACCEPTABLE).build();
     }
-    }
+}
 

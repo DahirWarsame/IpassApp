@@ -7,18 +7,18 @@ import java.sql.SQLException;
 
 public class UserDAO extends BaseDAO {
 
-    public String findUserForUsernameAndPassword(String username, String password) {
+    public String authenticateUser(String email, String password) {
         String user = null;
-        String query = "SELECT email FROM users WHERE email = ? AND password = ?";
+        String query = "SELECT user_id FROM users WHERE email = ? AND password = ?";
         try (Connection con = super.getConnection()) {
 
             PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.setString(1, username);
+            pstmt.setString(1, email);
             pstmt.setString(2, password);
 
             ResultSet rs = pstmt.executeQuery();
             if (rs.next())
-                user = rs.getString("email");
+                user = rs.getString("user_id");
             con.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -27,13 +27,13 @@ public class UserDAO extends BaseDAO {
         return user;
     }
 
-    public boolean registerUser(String username, String password) {
+    public boolean registerUser(String email, String password) {
         String query = "INSERT INTO users (email, password) VALUES(?,?)";
 
         try (Connection con = super.getConnection()) {
             PreparedStatement stmt = con.prepareStatement(query);
 
-            stmt.setString(1, username);
+            stmt.setString(1, email);
             stmt.setString(2, password);
 
             int affectedRows = stmt.executeUpdate();
