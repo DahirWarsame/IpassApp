@@ -31,6 +31,7 @@
     <link rel="stylesheet" type="text/css" href="semantic/out/components/dimmer.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/transition.css">
     <link rel="stylesheet" type="text/css" href="semantic/out/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="semantic/out/components/message.css">
     <link rel="stylesheet" type="text/css" href="assets/css/dashboard.css">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -38,7 +39,7 @@
     <script src="semantic/out/components/modal.js"></script>
     <script src="semantic/out/components/transition.js"></script>
     <script src="semantic/out/components/dimmer.js"></script>
-    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/uitgaves.js"></script>
     <style type="text/css">
 
         .hidden.menu {
@@ -46,7 +47,7 @@
         }
 
         .masthead.segment {
-            min-height: 700px;
+            min-height: 625px;
             padding: 1em 0em;
         }
 
@@ -161,7 +162,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
-            background-position: 0% 37%;
+            background-position: 0% 133%;
         }
 
         .ui.footer.segment {
@@ -210,13 +211,16 @@
         <h1 class="ui header">
             Welkom bij jouw Dashboard
         </h1>
-        <h2>Dit is joue hub voor al je informatie over jouw persoonlijke geldzaken.</h2>
+        <h2>Dit is jouw hub voor al je informatie over jouw persoonlijke geldzaken.</h2>
     </div>
 </div>
 <div class="ui vertical stripe segment">
     <div class="ui equal width stackable internally celled grid">
         <div class="center aligned row">
             <div class="column">
+                <div class="ui header">
+                    Uitgave Toevoegen
+                </div>
                 <form id="addUitgaveForm" method="post" class="ui large form">
                     <div class="field">
                         <div class="ui left icon input">
@@ -246,31 +250,52 @@
                             <input type="text" name="beschrijving" placeholder="beschrijving">
                         </div>
                     </div>
-                    <div class="field">
-                        <div class="ui left icon input">
-                            <i class="hashtag icon"></i>
-                            <input type="number" name="kenmerknummer" placeholder="Kenmerknummer">
+                    <div class="ui equal width stackable internally celled grid checkbox field">
+                        <div class="column">
+                            <i class="options icon"></i>
+                            <input id="betalingsregeling" type="checkbox" name="betalingsregeling"
+                                   onchange="toggleDisplay(this)">
+                            <label for="betalingsregeling">Is dit een betalingsregeling?</label>
+                        </div>
+                        <div class="column">
+                            <i class="options icon"></i>
+                            <input id="tijdelijke_uitgave" type="checkbox" name="tijdelijke_uitgave"
+                                   onchange="toggleDisplay(this)">
+                            <label for="tijdelijke_uitgave">Is dit een tijdelijke uitgave?</label>
                         </div>
                     </div>
-                    <div class="field">
-                        <div class="ui left icon input">
-                            <i class="hashtag icon"></i>
-                            <input type="number" name="aantal_maanden" placeholder="Aantal maanden">
+                    <div class="betalingsregeling">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="hashtag icon"></i>
+                                <input type="number" name="kenmerknummer" placeholder="Kenmerknummer">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="hashtag icon"></i>
+                                <input type="number" name="aantal_maanden" placeholder="Aantal maanden">
+                            </div>
                         </div>
                     </div>
-                    <div class="field">
-                        <div class="ui left icon input">
-                            <i class="linkify icon"></i>
-                            <input type="url" name="link"
-                                   placeholder="Tijdelijke Uitgave url (bijv. webshop artikel)">
+                    <div class="tijdelijke_uitgave">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="linkify icon"></i>
+                                <input type="url" name="link"
+                                       placeholder="Tijdelijke Uitgave url (bijv. webshop artikel)">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="image icon"></i>
+                                <input type="url" name="afbeelding" placeholder="afbeelding url">
+                            </div>
                         </div>
                     </div>
-                    <div class="field">
-                        <div class="ui left icon input">
-                            <i class="image icon"></i>
-                            <input type="url" name="afbeelding" placeholder="afbeelding url">
-                        </div>
-                    </div>
+
+
+                    <input id="user_id" type="hidden" name="user_id" hidden>
                     <input type="submit" value="Register" class="ui middle teal submit button">
                 </form>
             </div>
@@ -278,15 +303,33 @@
                 <h2 class="ui header">
                     <i class="euro icon"></i>
                     <div class="content">
-                        <div class="sub header">Het totaal bedrag is:</div>
+                        <div class="sub header">Het totaal uitgave bedrag is:</div>
                         <span id="totalUitgave"></span>
                     </div>
                 </h2>
             </div>
         </div>
     </div>
+    <div id="message" class="ui hidden floating success message">
+            <i class="close icon"></i>
+            <div class="header">
+                Uitgave succesvol toegevoegt
+            </div>
+            <p>U kunt de uitgave zien op u dashboard</p>
+        </div>
 </div>
 <script>
+    $(document).ready(
+        $(".betalingsregeling, .tijdelijke_uitgave").hide()
+    );
+    function toggleDisplay(element) {
+        if(element.checked){
+            $("."+element.id).show();
+        }
+        else {
+            $("."+element.id).hide();
+        }
+    }
     $("#addUitgaveForm").on("submit", function (e) {
         e.preventDefault();
         var userid = sessionStorage.getItem("sessionToken");
@@ -299,23 +342,35 @@
 //            }
 //        });
         var object = {};
-
+        $('#user_id').val(userid);
         var inputs = $("#addUitgaveForm input");
         var dropdown = $("#addUitgaveForm select");
-
+        var tijdelijke_uitgave = $("input#tijdelijke_uitgave").is(':checked');
+        var betalingsregeling = $("input#betalingsregeling").is(':checked');
 
         $.each(inputs, function (index, input) {
             object["" + input.name + ""] = input.value;
         });
         object["" + dropdown[0].name + ""] = dropdown[0].value;
+        object["tijdelijke_uitgave"] = tijdelijke_uitgave;
+        object["betalingsregeling"] = betalingsregeling;
         console.log(object);
         $.ajax({
-            url: "/restservices/dashboard/add/uitgave/" + userid,
+            url: "/restservices/dashboard/uitgave/add/",
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(object),
             success: function (result) {
-
+                $('#message').show();
+                $('.message .close')
+                    .on('click', function() {
+                        $(this)
+                            .closest('.message')
+                            .transition('fade')
+                        ;
+                    })
+                ;
+                loadTotalUitgaves()
             }
         });
     });

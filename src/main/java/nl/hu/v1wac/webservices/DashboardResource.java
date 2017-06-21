@@ -19,8 +19,8 @@ public class DashboardResource {
     @GET
     @Path("get/uitgaves/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String loadUitgaves(@PathParam("id") int id) {
-        System.out.println("DashboardResource/loadUitgaves");
+        public String loadUitgaves(@PathParam("id") int id) {
+            System.out.println("DashboardResource/loadUitgaves");
         JsonArrayBuilder jab = Json.createArrayBuilder();
 
         for (Uitgave u : service.getUitgaveByUserID(id)) {
@@ -50,11 +50,10 @@ public class DashboardResource {
 
     @POST
     @Path("/uitgave/add")
-    @Consumes("application/json")
-    public Response addUitgave(@FormParam("user_id") int id, String json) {
-        System.out.println(json);
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addUitgave(String json) {
         JsonObject object = stringToJson(json);
-        Uitgave uitgave  = buildUitgave(object,id);
+        Uitgave uitgave  = buildUitgave(object);
         service.addUitgave(uitgave);
         return Response.ok().build();
     }
@@ -72,11 +71,21 @@ public class DashboardResource {
     @PUT
     @Path("/uitgave/update/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUitgave(@PathParam("id") int id, String json) {
-        System.out.println(json);
+    public Response updateUitgave(String json) {
         JsonObject object = stringToJson(json);
-        Uitgave uitgave = buildUitgave(object,id);
+        Uitgave uitgave = buildUitgave(object);
         service.updateUitgave(uitgave);
+        return Response.ok().build();
+    }
+    @PUT
+    @Path("/inkomst/update/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateInkomst(String json) {
+        JsonObject object = stringToJson(json);
+        System.out.println("1: "+object);
+        Inkomst inkomst = buildInkomstUpdate(object);
+        System.out.println("2: "+inkomst);
+        service.updateInkomst(inkomst);
         return Response.ok().build();
     }
 
@@ -115,9 +124,24 @@ public class DashboardResource {
     @Path("/uitgave/getsum/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String getUitgaveSum(@PathParam("id") int id) {
-        int getUitgaveSum = service.getInkomstSum(id);
+        int totalUitgave = service.getUitgaveSum(id);
         JsonObjectBuilder job = Json.createObjectBuilder();
-        job.add("getUitgaveSum", getUitgaveSum);
+        job.add("totalUitgave", totalUitgave);
+        return job.build().toString();
+    }
+
+    @GET
+    @Path("/total/getsum/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getRestTotaal(@PathParam("id") int id) {
+        int totalUitgave = service.getUitgaveSum(id);
+        int totalInkomst = service.getInkomstSum(id);
+        int restTotal = 0;
+        if (totalInkomst > totalUitgave) restTotal = totalInkomst - totalUitgave;
+        else restTotal = totalUitgave - totalInkomst;
+
+        JsonObjectBuilder job = Json.createObjectBuilder();
+        job.add("restTotal", restTotal);
         return job.build().toString();
     }
 
@@ -160,50 +184,68 @@ public class DashboardResource {
         inkomst.setBeschrijving((object.getString("beschrijving")));
         return inkomst;
     }
+    private Inkomst buildInkomstUpdate(JsonObject object) {
+        Inkomst inkomst = buildInkomst(object);
+        inkomst.setInkomstID(Integer.parseInt(object.getString("inkomst_id")));
+        return inkomst;
+    }
 
-    private Uitgave buildUitgave(JsonObject object, int id){
-        Uitgave uitgave = new Uitgave(id);
+    private Uitgave buildUitgave(JsonObject object){
+        Uitgave uitgave = new Uitgave(Integer.parseInt(object.getString("user_id")));
 
         uitgave.setBedrag(Integer.parseInt(object.getString("bedrag")));
         uitgave.setSoortUitgave(object.getString("soort_uitgave"));
 
-        uitgave.setKenmerknummer(Integer.parseInt(object.getString("kenmerknummer")));
-        uitgave.setAantalMaanden(Integer.parseInt(object.getString("aantal_maanden")));
-
-        uitgave.setLink((object.getString("link")));
-        uitgave.setAfbeelding((object.getString("afbeelding")));
-
-        uitgave.setUitgaveDatum(java.sql.Date.valueOf(object.getString("uitgave_datum")));
+        if (object.getBoolean("betalingsregeling")){
+            uitgave.setKenmerknummer((object.getString("kenmerknummer")));
+            uitgave.setAantalMaanden(Integer.parseInt(object.getString("aantal_maanden")));
+        } else {
+            uitgave.setKenmerknummer("nvt");
+            uitgave.setAantalMaanden(0);
+        }
+        if (object.getBoolean("tijdelijke_uitgave")) {
+            uitgave.setLink((object.getString("link")));
+            uitgave.setAfbeelding((object.getString("afbeelding")));
+        } else{
+            uitgave.setLink("nvt");
+            uitgave.setAfbeelding("nvt");
+        }
+        uitgave.setUitgaveDatum(object.getString("uitgave_datum"));
         uitgave.setBeschrijving((object.getString("beschrijving")));
 
         System.out.println(uitgave);
 
         return uitgave;
     }
+    private Uitgave buildUitgaveUpdate(JsonObject object){
+        Uitgave uitgave = buildUitgave(object);
+        uitgave.setUitgaveID(Integer.parseInt(object.getString("uitgave_id")));
+        return uitgave;
+    }
 
     private JsonObjectBuilder buildUitgaveObject(Uitgave u) {
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("uitgave_id", u.getUitgaveID())
-                .add("user_id", u.getUserID())
                 .add("bedrag", u.getBedrag())
                 .add("soort_uitgave", u.getSoortUitgave())
+                .add("uitgave_datum", u.getUitgaveDatumString())
+                .add("beschrijving", u.getBeschrijving())
                 .add("kenmerknummer", u.getKenmerknummer())
                 .add("aantal_maanden", u.getAantalMaanden())
                 .add("link", u.getLink())
                 .add("afbeelding", u.getAfbeelding())
-                .add("uitgave_datum", u.getUitgaveDatum())
-                .add("beschrijving", u.getBeschrijving());
+                .add("user_id", u.getUserID());
         return job;
     }
 
     private JsonObjectBuilder buildInkomstObject(Inkomst i) {
         JsonObjectBuilder job = Json.createObjectBuilder();
         job.add("inkomst_id", i.getInkomstID())
-                .add("user_id", i.getUserID())
                 .add("bedrag", i.getBedrag())
                 .add("soort_inkomst", i.getSoortInkomen())
                 .add("inkomst_datum", i.getInkomstDatumString())
-                .add("beschrijving", i.getBeschrijving());
+                .add("beschrijving", i.getBeschrijving())
+                .add("user_id", i.getUserID());
         return job;
     }
 }

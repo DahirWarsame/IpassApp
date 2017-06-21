@@ -1,14 +1,13 @@
-// $(document).ready(initPage());
-// function initPage() {
-//     $("#addUitgaveForm").on("submit", function (e) {
-//         e.preventDefault();
-//         var userid = sessionStorage.getItem("sessionToken");
-//         $.post({
-//             url: "/restservices/dashboard/add/uitgave/" + userid,
-//             data: $(this).serialize(),
-//             success: function (data) {
-//                 $('#uitgaveForm').modal('hide');
-//             }
-//         });
-//     });
-// }
+$(document).ready(initPage());
+function initPage() {
+    loadTotalUitgaves();
+}
+
+function loadTotalUitgaves() {
+    var user_id = sessionStorage.getItem("sessionToken");
+    $.get("/restservices/dashboard/uitgave/getsum/" + user_id, function (data) {
+        console.log(data);
+        $("#totalUitgave").empty();
+        $("#totalUitgave").append(data['totalUitgave']);
+    });
+}

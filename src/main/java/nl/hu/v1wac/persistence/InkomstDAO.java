@@ -35,6 +35,7 @@ public class InkomstDAO extends BaseDAO {
     }
     public Inkomst findByID(int id) {
         List<Inkomst> inkomsten = selectInkomsten("SELECT * FROM inkomsten WHERE inkomst_id = " + id);
+        System.out.println(inkomsten.get(0));
         if (inkomsten.size() > 0) return inkomsten.get(0);
         return null;
     }

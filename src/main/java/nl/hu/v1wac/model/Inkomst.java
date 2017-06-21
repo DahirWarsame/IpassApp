@@ -74,15 +74,13 @@ public class Inkomst {
 
     public void setInkomstDatum(String inkomstDatum) {
         try {
-
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             Date parsed = format.parse(inkomstDatum);
             java.sql.Date sql = new java.sql.Date(parsed.getTime());
             this.inkomstDatum = sql;
         } catch (ParseException e) {
             e.printStackTrace();
         };
-
     }
 
     public void setBeschrijving(String beschrijving) {

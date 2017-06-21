@@ -2,6 +2,7 @@ package nl.hu.v1wac.model;
 
 import java.sql.Date;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class Uitgave {
@@ -9,14 +10,14 @@ public class Uitgave {
     private int userID;
     private double bedrag;
     private String soortUitgave;
-    private int kenmerknummer;
+    private String kenmerknummer;
     private int aantalMaanden;
     private String link;
     private String afbeelding;
-    private Date uitgaveDatum;
+    private java.sql.Date uitgaveDatum;
     private String beschrijving;
 
-    public Uitgave(int uitgaveID, int userID, double bedrag, String soortUitgave, int kenmerknummer, int aantalMaanden, String link, String afbeelding, Date uitgaveDatum, String beschrijving) {
+    public Uitgave(int uitgaveID, int userID, double bedrag, String soortUitgave, String kenmerknummer, int aantalMaanden, String link, String afbeelding, java.sql.Date uitgaveDatum, String beschrijving) {
         this.uitgaveID = uitgaveID;
         this.userID = userID;
         this.bedrag = bedrag;
@@ -49,8 +50,8 @@ public class Uitgave {
         return soortUitgave;
     }
 
-    public int getKenmerknummer() {
-        return kenmerknummer;
+    public String  getKenmerknummer() {
+        return (kenmerknummer != null && !kenmerknummer.isEmpty()) ? kenmerknummer: "null" ;
     }
 
     public int getAantalMaanden() {
@@ -62,15 +63,14 @@ public class Uitgave {
     }
 
     public String getAfbeelding() {
-        if(afbeelding.equals("null")) {
-            return afbeelding = "nvt";
-        } else {
             return afbeelding;
-        }
     }
 
-    public String getUitgaveDatum() {
-        Date date = uitgaveDatum;
+    public java.sql.Date getUitgaveDatum() {
+        return uitgaveDatum;
+    }
+    public String getUitgaveDatumString() {
+        java.sql.Date date = uitgaveDatum;
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         return dateFormat.format(date);
     }
@@ -95,7 +95,7 @@ public class Uitgave {
         this.soortUitgave = soortUitgave;
     }
 
-    public void setKenmerknummer(int kenmerknummer) {
+    public void setKenmerknummer(String kenmerknummer) {
         this.kenmerknummer = kenmerknummer;
     }
 
@@ -111,8 +111,15 @@ public class Uitgave {
         this.afbeelding = afbeelding;
     }
 
-    public void setUitgaveDatum(Date uitgaveDatum) {
-        this.uitgaveDatum = uitgaveDatum;
+    public void setUitgaveDatum(String uitgaveDatum) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+            java.util.Date parsed = format.parse(uitgaveDatum);
+            java.sql.Date sql = new java.sql.Date(parsed.getTime());
+            this.uitgaveDatum = sql;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        };
     }
 
     public void setBeschrijving(String beschrijving) {

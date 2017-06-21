@@ -1,151 +1,215 @@
-$(document).ready(initPage());
+$(document).ready(
+    //Initialize page
+    initPage()
+);
 function initPage() {
+    //Load tables
     loadUitgaves();
     loadInkomsten();
-    $('#addInkomstForm').on("submit", function (e) {
-        addInkomst()
-    });
-    $('#addUitgaveButtonCancel').on("click", function (e) {
-        $('#uitgaveForm').modal('hide');
-    });
+
+    //Load Money
+    // loadTotalUitgaves();
+    // loadRestTotaal();
+    // loadTotalInkomsten();
+
+    //Id specific actions
+    $("#inkomstTable").click(itemOptions);
+
+    $("#uitgaveTable").click(itemOptions);
+    $("#save").click(updateItem);
 }
 
-//TODO : Labels, update, insert, delete
+//TODO : update, delete
 
 function loadUitgaves() {
     var userid = sessionStorage.getItem("sessionToken");
     $.get("/restservices/dashboard/get/uitgaves/"+ userid, function (data) {
         var uitgaveTable = $("#uitgaveTable");
-        console.log(data);
+        var uitgaveTableBody = $("#uitgaveTable tbody");
+        uitgaveTableBody.empty();
+
         $.each(data, function (index, object) {
             var String =
-                "<tr id='row" +
-                index +
+                "<tr  id='" + object.uitgave_id+"'" +">" +
+                object.uitgave_id +
                 "'>" +
-                "<td>" +
+                "<td id='" + object.uitgave_id+"'" +">" +
                 object.beschrijving +
                 "</td>" +
-                "<td>" +
+                "<td id='" + object.uitgave_id+"'" +">" +
                 object.bedrag +
                 "</td>" +
-                "<td>" +
+                "<td id='" + object.uitgave_id+"'" +">" +
                 object.soort_uitgave +
                 "</td>" +
-                "<td>" +
+                "<td id='" + object.uitgave_id+"'" +">" +
                 object.uitgave_datum +
                 "</td>" +
-                "<td class='edit'><i class='ban icon'></i><i class='write icon'></i></td>" +
+                "<td><div class='ui icon buttons centered aligned '>" +
+                "<button class='mini ui negative button'> " +
+                "<i id='" + object.uitgave_id +"' class='ban icon'></i></button>" +
+                "<div class='or'></div> " +
+                "<button class='mini ui positive button'>" +
+                "<i id='" + object.uitgave_id +"' class='write icon'></i></button>" +
+                "</div></td>" +
                 "</tr>";
             uitgaveTable.append(String);
         });
+        loadTotalUitgaves();
+        loadRestTotaal();
     });
 }
 function loadInkomsten() {
     var user_id = sessionStorage.getItem("sessionToken");
     $.get("/restservices/dashboard/get/inkomsten/"+ user_id, function (data) {
         var inkomstTable = $("#inkomstTable");
-        console.log(data);
+        var inkomstTableBody = $("#inkomstTable tbody");
+        inkomstTableBody.empty();
         $.each(data, function (index, object) {
             var String =
-                "<tr id='row" +
-                index +
+                "<tr id='" +
+                object.inkomst_id +
                 "'>" +
-                "<td>" +
+                "<td id='" + object.inkomst_id+"'" +">" +
                 object.beschrijving +
                 "</td>" +
-                "<td>" +
+                "<td id='" + object.inkomst_id+"'" +">" +
                 object.bedrag +
                 "</td>" +
-                "<td>" +
+                "<td  id='" + object.inkomst_id+"'" +">" +
                 object.soort_inkomst +
                 "</td>" +
-                "<td>" +
+                "<td id='" + object.inkomst_id+"'" +">" +
                 object.inkomst_datum +
                 "</td>" +
-                "<td class='delete'><i class='ban icon'></i><i class='write icon'></i></td>" +
+                "<td><div class='ui icon buttons centered aligned '>" +
+                "<button class='mini ui negative button'> " +
+                "<i id='" + object.inkomst_id +"' class='ban icon'></i></button>" +
+                "<div class='or'></div> " +
+                "<button class='mini ui positive button'>" +
+                "<i id='" + object.inkomst_id +"' class='write icon'></i></button>" +
+                "</div></td>" +
                 "</tr>";
             inkomstTable.append(String);
         });
+        loadTotalInkomsten();
+        loadRestTotaal();
     });
 }
-function deleteUitgave(e) {
-    var row = e.target.parentNode;
-    var uitgaveId = row.firstChild.innerText;
 
-    $.ajax({
-        url: "/restservices/dashboard/uitgave/delete/" + uitgaveId,
-        type: "DELETE",
-        success: function(result) {
-            loadUitgaves();
-        }
-    });
-}
-function deleteInkomst(e) {
-    var row = e.target.parentNode;
-    var inkosmtId = row.firstChild.innerText;
+function getItem(e) {
+    var rowId = e.target.id;
+    var type = e.currentTarget.id;
+    var url="";
+    var formInputs="";
+    var modal="";
+    if(type.match("uitgave")){
+        url = "/restservices/dashboard/uitgave/get/";
+        modal = $('.uitgaveTableModal');
+        formInputs = $("#UitgaveForm input");
+    } else {
 
-    $.ajax({
-        url: "/restservices/dashboard/inkomst/delete/" + inkosmtId,
-        type: "DELETE",
-        success: function(result) {
-            loadInkomsten();
-        }
-    });
-}
-function addUitgave() {
-    // var object = {};
-    //
-    // var inputs = $("#addUitgaveForm input");
-    // var dropdown = $("#addUitgaveForm select");
-    //
-    //
-    //
-    // $.each(inputs, function(index, input) {
-    //     object["" + input.name + ""] = input.value;
-    // });
-    // object["" + dropdown[0].name + ""] = dropdown[0].value;
-    // console.log(object);
-    // $.ajax({
-    //     url: "/restservices/dashboard/add/uitgave/"+userid,
-    //     type: "POST",
-    //     contentType: "application/json",
-    //     data: JSON.stringify(object),
-    //     success: function(result) {
-    //         $('#uitgaveForm').modal('hide');
-    //     }
-    // });
-    $.post({
-        url: "/restservices/dashboard/add/uitgave/"+userid,
-        data: $(this).serialize(),
-        success: function (data) {
-            $('#uitgaveForm').modal('hide');
-        }
-    });
+        url = "/restservices/dashboard/inkomst/get/";
+        modal = $('.inkomstTableModal');
+        formInputs = $("#InkomstForm input");
 
+    }
+    $.get(url + rowId, function(data) {
+        console.log(data);
+        $.each(formInputs, function(index, input) {
+            input.value = data[input.name];
+        });
+        modal.modal('show');
+    });
 }
-function addInkomst(e) {
+function updateItem(e) {
+    var rowId = e.target.id;
+    var type = e.currentTarget.id;
+    var url="";
+    var formInputs="";
+    var modal="";
+    if(type.match("uitgave")){
+        url = "/restservices/dashboard/uitgave/update/";
+        modal = $('.uitgaveTableModal');
+        formInputs = $("#UitgaveForm input");
+    } else {
+
+        url = "/restservices/dashboard/inkomst/update/";
+        modal = $('.inkomstTableModal');
+        formInputs = $("#InkomstForm input");
+
+    }
     var object = {};
 
-    var inputs = $("#addInkomstForm input");
-    var dropdown = $("#addInkomstForm select");
-
-    var userid = sessionStorage.getItem("sessionToken");
-    $.each(inputs, function(index, input) {
+    $.each(formInputs, function(index, input) {
         object["" + input.name + ""] = input.value;
     });
-    object["" + dropdown[0].name + ""] = dropdown[0].value;
+    object["inkomst_id"] = rowId;
+    console.log(rowId);
+    console.log(object);
 
     $.ajax({
-        url: "/restservices/dashboard/add/inkomst/"+userid,
-        type: "POST",
+        url: url + rowId,
+        type: "PUT",
         contentType: "application/json",
         data: JSON.stringify(object),
         success: function(result) {
-            $('#inkomstForm').modal('hide');
+            //window.location.href = "../../dashboard.html";
         }
     });
 }
-function changeContent(e) {
-    if (e.target.classList.contains("write")) console.log(e.target.nodeName);
-    else if (e.target.classList.contains("ban")) deleteUitgave(e);
+function deleteItem(e) {
+    var rowId = e.target.id;
+    var type = e.currentTarget.id;
+
+    var url="";
+    if(type.match("uitgave")){
+        url = "/restservices/dashboard/uitgave/delete/";
+    } else {
+
+        url = "/restservices/dashboard/inkomst/delete/";
+    }
+
+    $.ajax({
+        url: url + rowId,
+        type: "DELETE",
+        success: function(result) {
+            if(type.match("uitgave")) {
+                loadUitgaves();
+            } else {
+                loadInkomsten();
+            }
+        }
+    });
+}
+function itemOptions(e) {
+    if (e.target.classList.contains("write")) alert("u about to adit");
+    else if (e.target.classList.contains("ban")) deleteItem(e);
+    else if (e.target.nodeName === "TD")getItem(e);
+
+}
+
+function loadTotalInkomsten() {
+    var user_id = sessionStorage.getItem("sessionToken");
+    $.get("/restservices/dashboard/inkomst/getsum/" + user_id, function (data) {
+        // console.log(data);
+        $("#totalInkomst").empty();
+        $("#totalInkomst").append(data['totaalInkomst']);
+    });
+}
+function loadTotalUitgaves() {
+    var user_id = sessionStorage.getItem("sessionToken");
+    $.get("/restservices/dashboard/uitgave/getsum/" + user_id, function (data) {
+        // console.log(data);
+        $("#totalUitgave").empty();
+        $("#totalUitgave").append(data['totalUitgave']);
+    });
+}
+function loadRestTotaal() {
+    var user_id = sessionStorage.getItem("sessionToken");
+    $.get("/restservices/dashboard/total/getsum/" + user_id, function (data) {
+        // console.log(data);
+        $("#restTotaal").empty();
+        $("#restTotaal").append(data['restTotal']);
+    });
 }

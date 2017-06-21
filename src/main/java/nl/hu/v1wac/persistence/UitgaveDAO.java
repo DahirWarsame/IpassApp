@@ -19,14 +19,24 @@ public class UitgaveDAO extends BaseDAO {
                             "(?,?,?,?,?,?,?,?,?)");
 
             stmt.setInt(1, uitgave.getUserID());
+            System.out.print(uitgave);
             stmt.setDouble(2, uitgave.getBedrag());
+            System.out.print(uitgave);
             stmt.setString(3, uitgave.getSoortUitgave());
-            stmt.setInt(4, uitgave.getKenmerknummer());
+            System.out.print(uitgave);
+            stmt.setString(4, uitgave.getKenmerknummer());
+            System.out.print(uitgave);
             stmt.setInt(5, uitgave.getAantalMaanden());
+            System.out.print(uitgave);
             stmt.setString(6, uitgave.getLink());
+            System.out.print(uitgave);
             stmt.setString(7, uitgave.getAfbeelding());
-            stmt.setString(8, uitgave.getUitgaveDatum());
+            System.out.print(uitgave);
+            stmt.setDate(8, uitgave.getUitgaveDatum());
+            System.out.print(uitgave);
             stmt.setString(9, uitgave.getBeschrijving());
+            System.out.print(uitgave);
+            int affectedRows = stmt.executeUpdate();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
@@ -51,11 +61,11 @@ public class UitgaveDAO extends BaseDAO {
             stmt.setInt(1, uitgave.getUserID());
             stmt.setDouble(2, uitgave.getBedrag());
             stmt.setString(3, uitgave.getSoortUitgave());
-            stmt.setInt(4, uitgave.getKenmerknummer());
+            stmt.setString(4, uitgave.getKenmerknummer());
             stmt.setInt(5, uitgave.getAantalMaanden());
             stmt.setString(6, uitgave.getLink());
             stmt.setString(7, uitgave.getAfbeelding());
-            stmt.setString(8, uitgave.getUitgaveDatum());
+            stmt.setDate(8, uitgave.getUitgaveDatum());
             stmt.setString(9, uitgave.getBeschrijving());
 
             stmt.setInt(10, uitgave.getUitgaveID());
@@ -96,7 +106,7 @@ public class UitgaveDAO extends BaseDAO {
                 int userID = dbResultSet.getInt("user_id");
                 double bedrag = dbResultSet.getDouble("bedrag");
                 String soortUitgave = dbResultSet.getString("soort_uitgave");
-                int kenmerknummer = dbResultSet.getInt("kenmerknummer");
+                String kenmerknummer = dbResultSet.getString("kenmerknummer");
                 int aantalMaanden = dbResultSet.getInt("aantal_maanden");
                 String link = dbResultSet.getString("link");
                 String afbeelding = dbResultSet.getString("afbeelding");
