@@ -41,12 +41,18 @@ public class AuthenticationResource {
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public Response registerUser(@FormParam("email") String email,
                                  @FormParam("password") String password,
-                                 @FormParam("password_confirmation") String password_confirmation) {
+                                 @FormParam("password_confirmation") String password_confirmation,
+                                 @FormParam("voornaam") String voornaam,
+                                 @FormParam("tussenvoegsel") String tussenvoegsel,
+                                 @FormParam("achternaam") String achternaam,
+                                 @FormParam("woonplaats") String woonplaats,
+                                 @FormParam("adres") String adres
+    ) {
         boolean success = false;
         try {
             UserDAO dao = new UserDAO();
             if (password.equals(password_confirmation)) {
-                success = dao.registerUser(email, password);
+                success = dao.createUser(email, password, voornaam,tussenvoegsel,achternaam,woonplaats,adres);
             }
 
             if (success) {

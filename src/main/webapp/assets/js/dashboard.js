@@ -6,7 +6,7 @@ function initPage() {
     //Load tables
     loadUitgaves();
     loadInkomsten();
-
+    getUserInfo();
     //Load Money
     // loadTotalUitgaves();
     // loadRestTotaal();
@@ -16,7 +16,12 @@ function initPage() {
     $("#inkomstTable").click(itemOptions);
 
     $("#uitgaveTable").click(itemOptions);
-    $("#save").click(updateItem);
+    $("#saveInkomst").click(updateInkomst);
+    $("#saveUitgave").click(updateUitgave);
+
+    $(document).ready(
+        $(".betalingsregeling, .tijdelijke_uitgave").hide()
+    );
 }
 
 //TODO : update, delete
@@ -122,31 +127,24 @@ function getItem(e) {
         modal.modal('show');
     });
 }
-function updateItem(e) {
-    var rowId = e.target.id;
-    var type = e.currentTarget.id;
-    var url="";
-    var formInputs="";
-    var modal="";
-    if(type.match("uitgave")){
-        url = "/restservices/dashboard/uitgave/update/";
-        modal = $('.uitgaveTableModal');
-        formInputs = $("#UitgaveForm input");
-    } else {
+function updateUitgave(e) {
 
-        url = "/restservices/dashboard/inkomst/update/";
-        modal = $('.inkomstTableModal');
-        formInputs = $("#InkomstForm input");
+    var rowId= $("#UitgaveForm #uitgave_id").val();
+    var url = "/restservices/dashboard/uitgave/update/";
+    var formInputs = $("#UitgaveForm input");
+    var modal = $('.uitgaveTableModal');
 
-    }
+    var tijdelijke_uitgave = $("input#tijdelijke_uitgave").is(':checked');
+    var betalingsregeling= $("input#betalingsregeling").is(':checked');
+
     var object = {};
-
     $.each(formInputs, function(index, input) {
         object["" + input.name + ""] = input.value;
     });
-    object["inkomst_id"] = rowId;
-    console.log(rowId);
-    console.log(object);
+
+    object["tijdelijke_uitgave"] = tijdelijke_uitgave;
+    object["betalingsregeling"] = betalingsregeling;
+
 
     $.ajax({
         url: url + rowId,
@@ -154,7 +152,32 @@ function updateItem(e) {
         contentType: "application/json",
         data: JSON.stringify(object),
         success: function(result) {
-            //window.location.href = "../../dashboard.html";
+            modal.modal('hide');
+            loadUitgaves();
+        }
+    });
+}
+function updateInkomst(e) {
+
+    var url = "/restservices/dashboard/inkomst/update/";
+    var modal = $('.inkomstTableModal');
+    var formInputs = $("#InkomstForm input");
+    var rowId= $("#InkomstForm #inkomst_id").value;
+
+    var object = {};
+
+    $.each(formInputs, function(index, input) {
+        object["" + input.name + ""] = input.value;
+    });
+
+    $.ajax({
+        url: url + rowId,
+        type: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify(object),
+        success: function(result) {
+            modal.modal('hide');
+            loadInkomsten();
         }
     });
 }
@@ -183,12 +206,31 @@ function deleteItem(e) {
     });
 }
 function itemOptions(e) {
-    if (e.target.classList.contains("write")) alert("u about to adit");
+    if (e.target.classList.contains("write")) getItem(e);
     else if (e.target.classList.contains("ban")) deleteItem(e);
     else if (e.target.nodeName === "TD")getItem(e);
 
 }
 
+function getUserInfo(e) {
+
+    var userid = sessionStorage.getItem("sessionToken");
+    var userTable = $("#userTable");
+    $.get("/restservices/dashboard/user/get/" + userid, function(data) {
+        console.log(data.volledigeNaam);
+        var String =
+            "<td id='" + data.user_id+"'" +">" +
+            data.volledigeNaam +
+            "</td>" +
+            "<td id='" + data.user_id+"'" +">" +
+            data.adres +
+            "</td>"+
+            "<td id='" + data.user_id+"'" +">" +
+            data.woonplaats +
+            "</td>" ;
+        userTable.append(String);
+    });
+}
 function loadTotalInkomsten() {
     var user_id = sessionStorage.getItem("sessionToken");
     $.get("/restservices/dashboard/inkomst/getsum/" + user_id, function (data) {
@@ -212,4 +254,13 @@ function loadRestTotaal() {
         $("#restTotaal").empty();
         $("#restTotaal").append(data['restTotal']);
     });
+}
+
+function toggleDisplay(element) {
+    if(element.checked){
+        $("."+element.id).show();
+    }
+    else {
+        $("."+element.id).hide();
+    }
 }

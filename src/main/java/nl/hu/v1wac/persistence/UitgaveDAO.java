@@ -9,8 +9,6 @@ import java.util.List;
 public class UitgaveDAO extends BaseDAO {
 
     public void save(Uitgave uitgave) {
-        System.out.print(uitgave);
-        System.out.print("in save func");
         try (Connection conn = super.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(
                     "INSERT INTO uitgaves " +
@@ -19,24 +17,16 @@ public class UitgaveDAO extends BaseDAO {
                             "(?,?,?,?,?,?,?,?,?)");
 
             stmt.setInt(1, uitgave.getUserID());
-            System.out.print(uitgave);
             stmt.setDouble(2, uitgave.getBedrag());
-            System.out.print(uitgave);
             stmt.setString(3, uitgave.getSoortUitgave());
-            System.out.print(uitgave);
             stmt.setString(4, uitgave.getKenmerknummer());
-            System.out.print(uitgave);
             stmt.setInt(5, uitgave.getAantalMaanden());
-            System.out.print(uitgave);
             stmt.setString(6, uitgave.getLink());
-            System.out.print(uitgave);
             stmt.setString(7, uitgave.getAfbeelding());
-            System.out.print(uitgave);
             stmt.setDate(8, uitgave.getUitgaveDatum());
-            System.out.print(uitgave);
             stmt.setString(9, uitgave.getBeschrijving());
-            System.out.print(uitgave);
             int affectedRows = stmt.executeUpdate();
+            conn.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
@@ -133,6 +123,7 @@ public class UitgaveDAO extends BaseDAO {
                 totaalUitgave = dbResultSet.getInt("totaal");
             }
 
+            conn.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }

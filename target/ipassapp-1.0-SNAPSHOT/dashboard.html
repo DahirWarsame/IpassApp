@@ -238,7 +238,7 @@
                         <th></th>
                     </tr>
                     </thead>
-                    <tbody style="text-align: center;">
+                    <tbody >
                     </tbody>
                 </table>
             </div>
@@ -252,6 +252,22 @@
                         </div>
                     </h2>
                 </div>
+                <div class="row">
+                    Welkom <label id="naam"></label>
+                        <table id="userTable" class="ui selectable celled table">
+                            <thead id="userBody">
+                            <tr>
+                                <th id="name">Naam</th>
+                                <th id="woonplaats">Woonplaats</th>
+                                <th id="adres">adres</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                </div>
+
                 <div class="row"></div>
             </div>
             <div class="column">
@@ -319,7 +335,7 @@
                     </div>
                 </div>
                 <input id="user_id" type="hidden" name="user_id" hidden>
-                <label id="save" class="ui fluid large teal submit button">Save</label>
+                <label id="saveInkomst" class="ui fluid large teal submit button">Save</label>
             </div>
 
             <div class="ui error message"></div>
@@ -343,7 +359,7 @@
     <div class="content">
         <form id="UitgaveForm" method="post" class="ui large form">
             <div class="ui segment">
-                <input type="hidden" name="inkomst_id" hidden>
+                <input id="uitgave_id" type="hidden" name="uitgave_id" hidden>
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="euro icon"></i>
@@ -368,6 +384,21 @@
                         <input type="text" name="beschrijving" placeholder="beschrijving">
                     </div>
                 </div>
+                <div class="ui equal width stackable internally celled grid checkbox field">
+                    <div class="column">
+                        <i class="options icon"></i>
+                        <input id="betalingsregeling" type="checkbox" name="betalingsregeling"
+                               onchange="toggleDisplay(this)">
+                        <label for="betalingsregeling">Is dit een betalingsregeling?</label>
+                    </div>
+                    <div class="column">
+                        <i class="options icon"></i>
+                        <input id="tijdelijke_uitgave" type="checkbox" name="tijdelijke_uitgave"
+                               onchange="toggleDisplay(this)">
+                        <label for="tijdelijke_uitgave">Is dit een tijdelijke uitgave?</label>
+                    </div>
+                </div>
+                <div class="betalingsregeling">
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="hashtag icon"></i>
@@ -380,6 +411,8 @@
                         <input type="number" name="aantal_maanden" placeholder="Aantal maanden">
                     </div>
                 </div>
+                </div>
+                <div class="tijdelijke_uitgave">
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="linkify icon"></i>
@@ -393,18 +426,20 @@
                         <input type="url" name="afbeelding" placeholder="afbeelding url">
                     </div>
                 </div>
+                </div>
+                <input type="hidden" name="user_id" hidden>
+                <label id="saveUitgave" class="ui fluid large teal submit button">Save</label>
             </div>
-
             <div class="ui error message"></div>
         </form>
-    </div>
-    <div class="actions">
-        <div class="ui black deny button">
-            Nope
-        </div>
-        <div class="ui positive right labeled icon button">
-            Yep, that's me
-            <i class="checkmark icon"></i>
+        <div class="actions">
+            <div class="ui black deny button">
+                Cancel
+            </div>
+            <div class="ui positive right labeled icon button">
+                Yep, that's me
+                <i class="checkmark icon"></i>
+            </div>
         </div>
     </div>
 </div>

@@ -37,6 +37,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="semantic/out/components/dropdown.js"></script>
     <script src="semantic/out/components/modal.js"></script>
+    <script src="semantic/out/components/form.js"></script>
     <script src="semantic/out/components/transition.js"></script>
     <script src="semantic/out/components/dimmer.js"></script>
     <script src="assets/js/uitgaves.js"></script>
@@ -190,6 +191,36 @@
             }
         });
     </script>
+    <script>
+        $(document)
+            .ready(function () {
+                $('.ui.large.form')
+                    .form({
+                        fields: {
+                            bedrag: {
+                                identifier: 'bedrag',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Please enter a amount'
+                                    }
+                                ]
+                            },
+                            uitgave_datum: {
+                                identifier: 'uitgave_datum',
+                                rules: [
+                                    {
+                                        type: 'empty',
+                                        prompt: 'Please enter a date'
+                                    }
+                                ]
+                            }
+                        }
+                    })
+                ;
+            })
+        ;
+    </script>
 </head>
 <body>
 
@@ -241,7 +272,7 @@
                     <div class="field">
                         <div class="ui left icon input">
                             <i class="calendar icon"></i>
-                            <input type="date" name="uitgave_datum" placeholder="DD-MM-YYYY">
+                            <input type="text" name="uitgave_datum" placeholder="DD-MM-YYYY">
                         </div>
                     </div>
                     <div class="field">
