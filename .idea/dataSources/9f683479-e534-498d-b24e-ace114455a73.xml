@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="no_spang@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.1">
+    <root id="1"/>
+    <schema id="2" parent="1" name="no_spang">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="compareoracle"/>
+    <schema id="4" parent="1" name="fietsverhuur"/>
+    <schema id="5" parent="1" name="information_schema"/>
+    <schema id="6" parent="1" name="mysql"/>
+    <schema id="7" parent="1" name="performance_schema"/>
+    <schema id="8" parent="1" name="test"/>
+    <table id="9" parent="2" name="inkomsten"/>
+    <table id="10" parent="2" name="personal_data"/>
+    <table id="11" parent="2" name="uitgaves"/>
+    <table id="12" parent="2" name="users"/>
+    <column id="13" parent="9" name="inkomst_id">
+      <Position>1</Position>
+      <DataType>int(10) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="14" parent="9" name="user_id">
+      <Position>2</Position>
+      <DataType>int(11) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="15" parent="9" name="bedrag">
+      <Position>3</Position>
+      <DataType>float unsigned|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="16" parent="9" name="soort_inkomen">
+      <Position>4</Position>
+      <DataType>enum(&apos;weekelijks&apos;, &apos;maandelijks&apos;, &apos;jaarlijks&apos;)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;maandelijks&apos;</DefaultExpression>
+    </column>
+    <column id="17" parent="9" name="inkomst_datum">
+      <Position>5</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="18" parent="9" name="beschrijving">
+      <Position>6</Position>
+      <DataType>text|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="19" parent="9" name="FK_inkomsten_users">
+      <ColNames>user_id</ColNames>
+    </index>
+    <key id="20" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>inkomst_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="21" parent="9" name="FK_inkomsten_users">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>no_spang</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefColNames>user_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="22" parent="10" name="personal_data_id">
+      <Position>1</Position>
+      <DataType>int(11) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="23" parent="10" name="user_id">
+      <Position>2</Position>
+      <DataType>int(11) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="24" parent="10" name="voornaam">
+      <Position>3</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="25" parent="10" name="tussenvoegsel">
+      <Position>4</Position>
+      <DataType>varchar(20)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="26" parent="10" name="achternaam">
+      <Position>5</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="27" parent="10" name="woonplaats">
+      <Position>6</Position>
+      <DataType>varchar(50)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="28" parent="10" name="adres">
+      <Position>7</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="29" parent="10" name="personal_data_users_FK">
+      <ColNames>user_id</ColNames>
+    </index>
+    <key id="30" parent="10" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>personal_data_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="31" parent="10" name="personal_data_users_FK">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>no_spang</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefColNames>user_id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="32" parent="11" name="uitgave_id">
+      <Position>1</Position>
+      <DataType>int(11) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="33" parent="11" name="user_id">
+      <Position>2</Position>
+      <DataType>int(11) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="34" parent="11" name="bedrag">
+      <Position>3</Position>
+      <DataType>double unsigned|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+    </column>
+    <column id="35" parent="11" name="soort_uitgave">
+      <Position>4</Position>
+      <DataType>enum(&apos;weekelijks&apos;, &apos;maandelijks&apos;, &apos;jaarlijks&apos;)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;maandelijks&apos;</DefaultExpression>
+    </column>
+    <column id="36" parent="11" name="kenmerknummer">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="37" parent="11" name="aantal_maanden">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="38" parent="11" name="link">
+      <Position>7</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <column id="39" parent="11" name="afbeelding">
+      <Position>8</Position>
+      <DataType>text|0</DataType>
+    </column>
+    <column id="40" parent="11" name="uitgave_datum">
+      <Position>9</Position>
+      <DataType>date|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;2017-06-22&apos;</DefaultExpression>
+    </column>
+    <column id="41" parent="11" name="beschrijving">
+      <Position>10</Position>
+      <DataType>text|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="42" parent="11" name="FK_uitgaves_users">
+      <ColNames>user_id</ColNames>
+    </index>
+    <key id="43" parent="11" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>uitgave_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="44" parent="11" name="FK_uitgaves_users">
+      <ColNames>user_id</ColNames>
+      <RefSchemaName>no_spang</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefColNames>user_id</RefColNames>
+    </foreign-key>
+    <column id="45" parent="12" name="user_id">
+      <Position>1</Position>
+      <DataType>int(11) unsigned|0</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+    </column>
+    <column id="46" parent="12" name="email">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="47" parent="12" name="password">
+      <Position>3</Position>
+      <DataType>varchar(100)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="48" parent="12" name="role">
+      <Position>4</Position>
+      <DataType>bit(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>b&apos;0&apos;</DefaultExpression>
+    </column>
+    <key id="49" parent="12" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>user_id</ColNames>
+      <Primary>1</Primary>
+    </key>
+  </database-model>
+</dataSource>
